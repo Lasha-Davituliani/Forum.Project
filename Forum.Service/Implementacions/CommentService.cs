@@ -9,95 +9,86 @@ using System.Security.Claims;
 
 namespace Forum.Service.Implementacions
 {
-    public class TopicService : ITopicService
+    public class CommentService : ICommentService
     {
-        private readonly ITopicRepository _topicRepository;
+        private readonly ICommentRepository _commentRepository;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager;
-
-        public TopicService(ITopicRepository topicRepository, IHttpContextAccessor httpContextAccessor)
+        public async Task AddCommentAsync(CommentForCreatingDto commentForCreatingDto)
         {
-            _topicRepository = topicRepository;
-            _httpContextAccessor = httpContextAccessor;
-            _mapper = MappingInitializer.Initialize();
-
-        }
-        public async Task AddTopicAsync(TopicForCreatingDto topicForCreatingDto)
-        {
-           if(topicForCreatingDto is null)
+            if (commentForCreatingDto is null)
                 throw new ArgumentNullException("Invalid argument passed!");
 
-           if(topicForCreatingDto.AuthorId != AuthenticatedUserId())
-                throw new UnauthorizedAccessException("Can`t add different users topic!");
+            if (commentForCreatingDto.UserId != AuthenticatedUserId())
+                throw new UnauthorizedAccessException("Can`t add different users comment!");
 
-            var result = _mapper.Map<TopicEntity>(topicForCreatingDto);
-            await _topicRepository.AddTopicAsync(result);
+            var result = _mapper.Map<CommentEntity>(commentForCreatingDto);
+            await _commentRepository.AddCommentAsync(result);
 
-            var user = await _userManager.FindByIdAsync(topicForCreatingDto.AuthorId);            
+            var user = await _userManager.FindByIdAsync(commentForCreatingDto.UserId);
             await _userManager.UpdateAsync(user);
 
-            await _topicRepository.Save();
+            await _commentRepository.Save();
         }
 
-        public async Task DeleteTopicAsync(int Id)
+        public async Task DeleteCommentAsync(int id)
         {
-            if (Id <= 0)
+            if (id <= 0)
                 throw new ArgumentNullException("Invalid argument passed");
 
-            var rawTodo = await _topicRepository.GetSingleTopicAsync(x => x.Id == Id);
+            var rawTodo = await _commentRepository.GetSingleCommentAsync(x => x.Id == id);
 
             if (rawTodo is null)
-                throw new TopicNotFoundException();
+                throw new CommentNotFoundException();
 
             if (rawTodo.AuthorId.Trim() == AuthenticatedUserId().Trim() || AuthenticatedUserRole().Trim() == "Admin")
             {
-                _topicRepository.DeleteTopic(rawTodo);
-                await _topicRepository.Save();
+                _commentRepository.DeleteComment(rawTodo);
+                await _commentRepository.Save();
             }
             else
             {
-                throw new UnauthorizedAccessException("Can`t delet different users topic!");
+                throw new UnauthorizedAccessException("Can`t delet different users comment!");
             }
         }
 
-        public async Task<TopicForGettingDto> GetSingleTopicByUserId(int topicId, string userId)
-        {
-            if (topicId <= 0 || string.IsNullOrWhiteSpace(userId))
-                throw new ArgumentNullException("Invalid argument passed!");
-
-            if (AuthenticatedUserId().Trim() != userId.Trim())
-                throw new UnauthorizedAccessException();
-
-            var rawTodo = await _topicRepository.GetSingleTopicAsync(x => x.Id == topicId && x.AuthorId == userId);
-
-            if (rawTodo is null)
-                throw new TopicNotFoundException();
-
-            var result = _mapper.Map<TopicForGettingDto>(rawTodo);
-            return result;
-        }
-
-        public async Task<List<TopicForGettingDto>> GetTopicsOfUserAsync(string userId)
+        public async Task<List<CommentForGettingDto>> GetCommentsOfUserAsync(string userId)
         {
             if (string.IsNullOrWhiteSpace(userId))
                 throw new ArgumentNullException("Invalid argument passed");
             if (AuthenticatedUserId().Trim() != userId.Trim())
                 throw new UnauthorizedAccessException();
 
-            var rowTodos = await _topicRepository.GetAllTopicsAsync(x => x.AuthorId.Trim() == userId.Trim());
-            List<TopicForGettingDto> result = new();
+            var rowTodos = await _commentRepository.GetAllCommentsAsync(x => x.AuthorId.Trim() == userId.Trim());
+            List<CommentForGettingDto> result = new();
 
             if (rowTodos.Count > 0)
-                result = _mapper.Map<List<TopicForGettingDto>>(rowTodos);
+                result = _mapper.Map<List<CommentForGettingDto>>(rowTodos);
 
             return result;
         }
 
-        public Task UpdateTopicAsync(TopicForUpdatingDto topicForUpdatingDto)
+        public async Task<CommentForGettingDto> GetSingleCommentByUserId(int commentId, string userId)
+        {
+            if (commentId <= 0 || string.IsNullOrWhiteSpace(userId))
+                throw new ArgumentNullException("Invalid argument passed!");
+
+            if (AuthenticatedUserId().Trim() != userId.Trim())
+                throw new UnauthorizedAccessException();
+
+            var rawTodo = await _commentRepository.GetSingleCommentAsync(x => x.Id == commentId && x.AuthorId == userId);
+
+            if (rawTodo is null)
+                throw new CommentNotFoundException();
+
+            var result = _mapper.Map<CommentForGettingDto>(rawTodo);
+            return result;
+        }
+
+        public Task UpdateCommentAsync(CommentForUpdatingDto commentForUpdatingDto)
         {
             throw new NotImplementedException();
-
             //if (todoForUpdatingDto is null)
             //    throw new ArgumentNullException("Invalid argument passed");
 
@@ -137,7 +128,6 @@ namespace Forum.Service.Implementacions
                 throw new UnauthorizedAccessException("Can`t get credentials of unauthorized user!");
             }
         }
-
         private string AuthenticatedUserRole()
         {
             if (_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)

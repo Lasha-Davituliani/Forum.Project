@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Forum.Repository\Forum.Repositories.csproj" />
     <ProjectReference Include="..\Forum.Service\Forum.Service.csproj" />
   </ItemGroup>

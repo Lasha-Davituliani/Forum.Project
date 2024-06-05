@@ -6,7 +6,7 @@ namespace Forum.Contracts
     {
         Task<List<CommentForGettingDto>> GetCommentsOfUserAsync(string userId);
         Task<CommentForGettingDto> GetSingleCommentByUserId(int commentId, string userId);
-        Task DeleteCommentAsync(int commentId);
+        Task DeleteCommentAsync(int id);
         Task AddCommentAsync(CommentForCreatingDto commentForCreatingDto);
         Task UpdateCommentAsync(CommentForUpdatingDto commentForUpdatingDto);
     }

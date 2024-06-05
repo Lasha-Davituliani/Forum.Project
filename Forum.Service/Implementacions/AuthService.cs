@@ -11,7 +11,7 @@ using System.Security.Claims;
 
 namespace Forum.Service.Implementacions
 {
-    internal class AuthService : IAuthService
+    public class AuthService : IAuthService
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;

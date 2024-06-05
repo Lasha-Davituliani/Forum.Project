@@ -225,15 +225,10 @@ namespace Forum.Data.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "8716071C-1D9B-48FD-B3D0-F059C4FB8031", 0, "86227820-ab05-4429-8155-5d085f7bb3a3", "admin@gmail.com", false, true, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEAbt4dvYljwbOktmmdQUaQ83/yvJdvWRS7aTkP1x7bKpXc9pKZCb5uFPnF3qwvIK3A==", "555337681", false, "b1dda6a1-a166-42d1-908e-bb9e49b0021b", false, "admin@gmail.com" },
-                    { "87746F88-DC38-4756-924A-B95CFF3A1D8A", 0, "5dcc1a7d-7bca-446d-9b07-73ea6429cc5e", "gio@gmail.com", false, true, null, "GIO@GMAIL.COM", "GIO@GMAIL.COM", "AQAAAAIAAYagAAAAEFXW6C8I0rgtc+WQ3N0uj/Xyo5lQ5JTon6r1bhaseuBT8ceUxlS9tvVcKyHAwfiDCQ==", "551442269", false, "2f87a06a-8ca5-47a7-bdf0-62d63410cdbd", false, "gio@gmail.com" },
-                    { "D514EDC9-94BB-416F-AF9D-7C13669689C9", 0, "ed2d2f98-0a40-42d2-9611-1fddc6c18d0c", "nika@gmail.com", false, true, null, "NIKA@GMAIL.COM", "NIKA@GMAIL.COM", "AQAAAAIAAYagAAAAEAR+lJ27lA2w4URu2wVD4t8DZPjRJIWrBG6fP/L67ArkG+v3tiW5LAVb4XV6F5+DOA==", "558490645", false, "c90c0ff1-338c-4d49-89ff-66a83d68cd63", false, "nika@gmail.com" }
+                    { "8716071C-1D9B-48FD-B3D0-F059C4FB8031", 0, "ab595b81-d707-4963-8578-3d8797e4845e", "admin@gmail.com", false, true, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEFofNR73+nPpMlaD3kme92qDpt9XKhyC94kHhmnoVgZDbVk25RogxHRazyyfAs2NxQ==", "555337681", false, "fb2cf86a-0981-48b2-84be-b9016f8d4020", false, "admin@gmail.com" },
+                    { "87746F88-DC38-4756-924A-B95CFF3A1D8A", 0, "fea5b47a-f189-44ef-9998-8559e596c586", "gio@gmail.com", false, true, null, "GIO@GMAIL.COM", "GIO@GMAIL.COM", "AQAAAAIAAYagAAAAEIVJnTqC8p0M6q7G4InMPtL3lzYLQfHVMzGXNWCesQzE5Rh7O320PMeuMGLICX3Dkg==", "551442269", false, "88c8c424-4d01-4fc3-8e0d-6e6a6ce58f82", false, "gio@gmail.com" },
+                    { "D514EDC9-94BB-416F-AF9D-7C13669689C9", 0, "e2ae943b-5d65-42c2-a251-8efd7100babf", "nika@gmail.com", false, true, null, "NIKA@GMAIL.COM", "NIKA@GMAIL.COM", "AQAAAAIAAYagAAAAEHsv16Sg1+HvLiJmUf8az0QGyOeH7wr6rUVgEJSFPoTUAhTuSzCbfNG/QZ9V4HFC9Q==", "558490645", false, "9ee1aa6e-fecc-4f66-bb05-d9beb83f5c41", false, "nika@gmail.com" }
                 });
-
-            migrationBuilder.InsertData(
-                table: "Topics",
-                columns: new[] { "Id", "AuthorId", "CommentCount", "CreationDate", "Description", "State", "Status", "Title" },
-                values: new object[] { 1, "8716071C - 1D9B - 48FD - B3D0 - F059C4FB8031", 0, new DateTime(2024, 6, 4, 20, 23, 0, 872, DateTimeKind.Local).AddTicks(6170), "Story Description...", 0, 0, "Story" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -246,17 +241,13 @@ namespace Forum.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Comments",
-                columns: new[] { "Id", "AuthorId", "Content", "CreationDate", "TopicId" },
-                values: new object[] { 1, "87746F88-DC38-4756-924A-B95CFF3A1D8A", "Great Story!", new DateTime(2024, 6, 4, 20, 23, 0, 872, DateTimeKind.Local).AddTicks(6816), 1 });
-
-            migrationBuilder.InsertData(
                 table: "Topics",
                 columns: new[] { "Id", "AuthorId", "CommentCount", "CreationDate", "Description", "State", "Status", "Title" },
                 values: new object[,]
                 {
-                    { 2, "87746F88-DC38-4756-924A-B95CFF3A1D8A", 0, new DateTime(2024, 6, 4, 20, 23, 0, 872, DateTimeKind.Local).AddTicks(6199), "Story2 Description...", 0, 0, "Story2" },
-                    { 3, "D514EDC9-94BB-416F-AF9D-7C13669689C9", 0, new DateTime(2024, 6, 4, 20, 23, 0, 872, DateTimeKind.Local).AddTicks(6205), "Story3 Description...", 0, 0, "Story3" }
+                    { 1, "8716071C-1D9B-48FD-B3D0-F059C4FB8031", 0, new DateTime(2024, 6, 5, 17, 11, 31, 44, DateTimeKind.Local).AddTicks(5832), "Story Description...", 0, 0, "Story" },
+                    { 2, "87746F88-DC38-4756-924A-B95CFF3A1D8A", 0, new DateTime(2024, 6, 5, 17, 11, 31, 44, DateTimeKind.Local).AddTicks(5851), "Story2 Description...", 0, 0, "Story2" },
+                    { 3, "D514EDC9-94BB-416F-AF9D-7C13669689C9", 0, new DateTime(2024, 6, 5, 17, 11, 31, 44, DateTimeKind.Local).AddTicks(5853), "Story3 Description...", 0, 0, "Story3" }
                 });
 
             migrationBuilder.InsertData(
@@ -264,8 +255,9 @@ namespace Forum.Data.Migrations
                 columns: new[] { "Id", "AuthorId", "Content", "CreationDate", "TopicId" },
                 values: new object[,]
                 {
-                    { 2, "D514EDC9-94BB-416F-AF9D-7C13669689C9", "Great Story2!", new DateTime(2024, 6, 4, 20, 23, 0, 872, DateTimeKind.Local).AddTicks(6823), 2 },
-                    { 3, "8716071C-1D9B-48FD-B3D0-F059C4FB8031", "Great Story3!", new DateTime(2024, 6, 4, 20, 23, 0, 872, DateTimeKind.Local).AddTicks(6828), 3 }
+                    { 1, "87746F88-DC38-4756-924A-B95CFF3A1D8A", "Great Story!", new DateTime(2024, 6, 5, 17, 11, 31, 44, DateTimeKind.Local).AddTicks(6312), 1 },
+                    { 2, "D514EDC9-94BB-416F-AF9D-7C13669689C9", "Great Story2!", new DateTime(2024, 6, 5, 17, 11, 31, 44, DateTimeKind.Local).AddTicks(6315), 2 },
+                    { 3, "8716071C-1D9B-48FD-B3D0-F059C4FB8031", "Great Story3!", new DateTime(2024, 6, 5, 17, 11, 31, 44, DateTimeKind.Local).AddTicks(6317), 3 }
                 });
 
             migrationBuilder.CreateIndex(

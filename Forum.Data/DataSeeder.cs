@@ -86,7 +86,7 @@ namespace Forum.Data
                     Title = "Story",
                     Description = "Story Description...",
                     CreationDate = DateTime.Now,
-                    AuthorId = "8716071C - 1D9B - 48FD - B3D0 - F059C4FB8031",
+                    AuthorId = "8716071C-1D9B-48FD-B3D0-F059C4FB8031",
                     State = State.Pending,
                     Status = Status.Active
                 },
@@ -140,17 +140,17 @@ namespace Forum.Data
                      AuthorId = "8716071C-1D9B-48FD-B3D0-F059C4FB8031"
                  }
                 );
-            modelBuilder.Entity<CommentEntity>()
-                        .HasOne(c => c.Topic)
-                        .WithMany(t => t.Comments)
-                        .HasForeignKey(c => c.TopicId)
-                        .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<CommentEntity>()
+            //            .HasOne(c => c.Topic)
+            //            .WithMany(t => t.Comments)
+            //            .HasForeignKey(c => c.TopicId)
+            //            .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<CommentEntity>()
-                        .HasOne(c => c.Author)
-                        .WithMany(u => u.Comments)
-                        .HasForeignKey(c => c.AuthorId)
-                        .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<CommentEntity>()
+            //            .HasOne(c => c.Author)
+            //            .WithMany(u => u.Comments)
+            //            .HasForeignKey(c => c.AuthorId)
+            //            .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

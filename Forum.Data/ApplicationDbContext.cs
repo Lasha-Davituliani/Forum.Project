@@ -15,6 +15,19 @@ namespace Forum.Data
         {
             base.OnModelCreating(modelBuilder);
 
+
+            modelBuilder.Entity<CommentEntity>()
+                        .HasOne(c => c.Topic)
+                        .WithMany(t => t.Comments)
+                        .HasForeignKey(c => c.TopicId)
+                        .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<CommentEntity>()
+                        .HasOne(c => c.Author)
+                        .WithMany(u => u.Comments)
+                        .HasForeignKey(c => c.AuthorId)
+                        .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.SeedTopics();
             modelBuilder.SeedComments();
             modelBuilder.SeedRoles();

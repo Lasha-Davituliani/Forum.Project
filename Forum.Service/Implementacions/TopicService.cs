@@ -45,30 +45,53 @@ namespace Forum.Service.Implementacions
             if (Id <= 0)
                 throw new ArgumentNullException("Invalid argument passed");
 
-            var rawTodo = await _topicRepository.GetAllTopicsAsync(x => x.Id == Id);
+            var rawTodo = await _topicRepository.GetSingleTopicAsync(x => x.Id == Id);
 
             if (rawTodo is null)
                 throw new TopicNotFoundException();
 
-            //if (rawTodo.Author.Trim() == AuthenticatedUserId().Trim() || AuthenticatedUserRole().Trim() == "Admin")
-            //{
-            //    _topicRepository.DeleteTopic(rawTodo);
-            //    await _topicRepository.Save();
-            //}
-            //else
-            //{
-            //    throw new UnauthorizedAccessException("Can`t delet different users todo!");
-            //}
+            if (rawTodo.AuthorId.Trim() == AuthenticatedUserId().Trim() || AuthenticatedUserRole().Trim() == "Admin")
+            {
+                _topicRepository.DeleteTopic(rawTodo);
+                await _topicRepository.Save();
+            }
+            else
+            {
+                throw new UnauthorizedAccessException("Can`t delet different users todo!");
+            }
         }
 
-        public Task<TopicForGettingDto> GetSingleTopicByUserId(int topicId, string userId)
+        public async Task<TopicForGettingDto> GetSingleTopicByUserId(int topicId, string userId)
         {
-            throw new NotImplementedException();
+            if (topicId <= 0 || string.IsNullOrWhiteSpace(userId))
+                throw new ArgumentNullException("Invalid argument passed!");
+
+            if (AuthenticatedUserId().Trim() != userId.Trim())
+                throw new UnauthorizedAccessException();
+
+            var rawTodo = await _topicRepository.GetSingleTopicAsync(x => x.Id == topicId && x.AuthorId == userId);
+
+            if (rawTodo is null)
+                throw new TopicNotFoundException();
+
+            var result = _mapper.Map<TopicForGettingDto>(rawTodo);
+            return result;
         }
 
-        public Task<List<TopicForGettingDto>> GetTopicsOfUserAsync(string userId)
+        public async Task<List<TopicForGettingDto>> GetTopicsOfUserAsync(string userId)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(userId))
+                throw new ArgumentNullException("Invalid argument passed");
+            if (AuthenticatedUserId().Trim() != userId.Trim())
+                throw new UnauthorizedAccessException();
+
+            var rowTodos = await _topicRepository.GetAllTopicsAsync(x => x.AuthorId.Trim() == userId.Trim());
+            List<TopicForGettingDto> result = new();
+
+            if (rowTodos.Count > 0)
+                result = _mapper.Map<List<TopicForGettingDto>>(rowTodos);
+
+            return result;
         }
 
         public Task UpdateTopicAsync(TopicForUpdatingDto topicForUpdatingDto)

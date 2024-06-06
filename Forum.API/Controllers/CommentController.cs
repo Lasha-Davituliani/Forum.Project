@@ -16,7 +16,7 @@ namespace Forum.API.Controllers
             _response = new ApiResponse();
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("{userId}/comment")]
         public async Task<IActionResult> AllCommentsOfUser([FromRoute] string userId)
         {
             var result = await _commnetService.GetCommentsOfUserAsync(userId);
@@ -43,7 +43,7 @@ namespace Forum.API.Controllers
             return StatusCode(_response.StatusCode, _response);
         }
 
-        [HttpPost]
+        [HttpPost("")]
         public async Task<IActionResult> AddComment([FromBody] CommentForCreatingDto model)
         {
             await _commnetService.AddCommentAsync(model);

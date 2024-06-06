@@ -34,11 +34,7 @@ namespace Forum.Service.Implementacions
         public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
         {
            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName.ToLower() == loginRequestDto.UserName.ToLower());
-
-            if (!user.LockoutEnabled)
-            {
-                throw new UnauthorizedAccessException("Unable to sign in with locked account");
-            }
+           
             bool isValid = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
 
             if (user == null || isValid == false)
@@ -60,7 +56,7 @@ namespace Forum.Service.Implementacions
                 PhoneNumber = user.PhoneNumber
             };
 
-            LoginResponseDto result = new LoginResponseDto()
+            LoginResponseDto result = new()
             {
                 User = userDto,
                 Token = token

@@ -5,6 +5,7 @@ using Forum.Models;
 using Forum.Service.Exceptions;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using System.Security.Claims;
 
 namespace Forum.Service.Implementacions
@@ -15,6 +16,15 @@ namespace Forum.Service.Implementacions
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager;
+
+        public CommentService(ICommentRepository commentRepository, IHttpContextAccessor httpContextAccessor, Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager)
+        {
+            _commentRepository = commentRepository;
+            _httpContextAccessor = httpContextAccessor;
+            _mapper = MappingInitializer.Initialize();
+            _userManager = userManager;
+
+        }
         public async Task AddCommentAsync(CommentForCreatingDto commentForCreatingDto)
         {
             if (commentForCreatingDto is null)
@@ -86,35 +96,33 @@ namespace Forum.Service.Implementacions
             return result;
         }
 
-        public Task UpdateCommentAsync(CommentForUpdatingDto commentForUpdatingDto)
-        {
-            throw new NotImplementedException();
-            //if (todoForUpdatingDto is null)
-            //    throw new ArgumentNullException("Invalid argument passed");
+        public async Task UpdateCommentAsync(CommentForUpdatingDto commentForUpdatingDto)
+        {            
+            if (commentForUpdatingDto is null)
+                throw new ArgumentNullException("Invalid argument passed");
 
-            //await _todoRepository.UpdateTodoAsync(_mapper.Map<TodoEntity>(todoForUpdatingDto));
-            ////await _todoRepository.Save();
+            await _commentRepository.UpdateCommentAsync(_mapper.Map<CommentEntity>(commentForUpdatingDto));
+            await _commentRepository.Save();
 
         }
 
-        //public async Task UpdateTodoAsync(int todoId, JsonPatchDocument<TodoForUpdatingDto> patchDocument)
-        //{
-        //    if (todoId <= 0)
-        //        throw new ArgumentException("Invalid argument passed");
+        public async Task UpdateCommentAsync(int commentId, JsonPatchDocument<CommentForUpdatingDto> patchDocument)
+        {
+            if (commentId <= 0)
+                throw new ArgumentException("Invalid argument passed");
 
-        //    //Check if todo exists
-        //    TodoEntity rawTodo = await _todoRepository.GetSingleTodoAsync(x => x.Id == todoId);
+            CommentEntity rawTodo = await _commentRepository.GetSingleCommentAsync(x => x.Id == commentId);
 
-        //    if (rawTodo == null)
-        //        throw new TodoNotFoundException();
+            if (rawTodo == null)
+                throw new CommentNotFoundException();
 
-        //    TodoForUpdatingDto todoToPatch = _mapper.Map<TodoForUpdatingDto>(rawTodo);
+            CommentForUpdatingDto commentToPatch = _mapper.Map<CommentForUpdatingDto>(rawTodo);
 
-        //    patchDocument.ApplyTo(todoToPatch);
-        //    _mapper.Map(todoToPatch, rawTodo);
+            patchDocument.ApplyTo(commentToPatch);
+            _mapper.Map(commentToPatch, rawTodo);
 
-        //    //await _todoRepository.Save();
-        //}
+            //await _todoRepository.Save();
+        }
 
         private string AuthenticatedUserId()
         {

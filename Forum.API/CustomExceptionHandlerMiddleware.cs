@@ -3,10 +3,10 @@ using System.Net;
 
 namespace Forum.API
 {
-    public class CustomExeptionHandlerMiddleware
+    public class CustomExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
-        public CustomExeptionHandlerMiddleware(RequestDelegate next)
+        public CustomExceptionHandlerMiddleware(RequestDelegate next)
         {
             _next = next;
         }

@@ -1,4 +1,5 @@
 ﻿using Forum.Models;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Forum.Contracts
 {
@@ -9,5 +10,6 @@ namespace Forum.Contracts
         Task DeleteTopicAsync(int Id);
         Task AddTopicAsync(TopicForCreatingDto topicForCreatingDto);
         Task UpdateTopicAsync(TopicForUpdatingDto topicForUpdatingDto);
+        Task UpdateTopicAsync(int topicId, JsonPatchDocument<TopicForUpdatingDto> patchDocument);
     }
 }

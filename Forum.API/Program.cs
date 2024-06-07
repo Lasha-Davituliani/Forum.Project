@@ -1,4 +1,3 @@
-
 namespace Forum.API
 {
     public class Program
@@ -13,22 +12,17 @@ namespace Forum.API
             builder.AddIdentity();
             builder.AddAuthentication();
             builder.AddHttpContextAccessor();
-            builder.AddBackgroundJobs();
+            //builder.AddBackgroundJobs();
             builder.AddScopedServices();
             builder.AddControllers();
             builder.AddEndpointsApiExplorer();
-            builder.AddCors();
             builder.AddSwagger();
+            builder.AddCors();
 
             var app = builder.Build();
-
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            app.UseMiddleware<CustomExeptionHandlerMiddleware>();
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            app.UseMiddleware<CustomExceptionHandlerMiddleware>();
             app.UseHttpsRedirection();
             app.UseCors(builder.Configuration.GetValue<string>("Cors:AllowOrigin"));
             app.UseAuthentication();

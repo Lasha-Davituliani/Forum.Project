@@ -6,6 +6,8 @@ using System.Net;
 
 namespace Forum.API.Controllers
 {
+    [Route("api/auth")]
+    [ApiController]
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;

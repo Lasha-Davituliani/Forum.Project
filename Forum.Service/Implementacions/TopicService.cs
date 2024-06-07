@@ -5,6 +5,7 @@ using Forum.Models;
 using Forum.Service.Exceptions;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using System.Security.Claims;
 
 namespace Forum.Service.Implementacions
@@ -16,11 +17,12 @@ namespace Forum.Service.Implementacions
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager;
 
-        public TopicService(ITopicRepository topicRepository, IHttpContextAccessor httpContextAccessor)
+        public TopicService(ITopicRepository topicRepository, IHttpContextAccessor httpContextAccessor, Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager)
         {
             _topicRepository = topicRepository;
             _httpContextAccessor = httpContextAccessor;
             _mapper = MappingInitializer.Initialize();
+            _userManager = userManager;
 
         }
         public async Task AddTopicAsync(TopicForCreatingDto topicForCreatingDto)
@@ -34,7 +36,7 @@ namespace Forum.Service.Implementacions
             var result = _mapper.Map<TopicEntity>(topicForCreatingDto);
             await _topicRepository.AddTopicAsync(result);
 
-            var user = await _userManager.FindByIdAsync(topicForCreatingDto.AuthorId);            
+            var user = await _userManager.FindByIdAsync(topicForCreatingDto.AuthorId);
             await _userManager.UpdateAsync(user);
 
             await _topicRepository.Save();
@@ -94,36 +96,34 @@ namespace Forum.Service.Implementacions
             return result;
         }
 
-        public Task UpdateTopicAsync(TopicForUpdatingDto topicForUpdatingDto)
+        public async Task UpdateTopicAsync(TopicForUpdatingDto topicForUpdatingDto)
         {
-            throw new NotImplementedException();
+            
+            if (topicForUpdatingDto is null)
+                throw new ArgumentNullException("Invalid argument passed");
 
-            //if (todoForUpdatingDto is null)
-            //    throw new ArgumentNullException("Invalid argument passed");
-
-            //await _todoRepository.UpdateTodoAsync(_mapper.Map<TodoEntity>(todoForUpdatingDto));
-            ////await _todoRepository.Save();
+            await _topicRepository.UpdateTopicAsync(_mapper.Map<TopicEntity>(topicForUpdatingDto));
+            await _topicRepository.Save();
 
         }
 
-        //public async Task UpdateTodoAsync(int todoId, JsonPatchDocument<TodoForUpdatingDto> patchDocument)
-        //{
-        //    if (todoId <= 0)
-        //        throw new ArgumentException("Invalid argument passed");
+        public async Task UpdateTopicAsync(int topicId, JsonPatchDocument<TopicForUpdatingDto> patchDocument)
+        {
+            if (topicId <= 0)
+                throw new ArgumentException("Invalid argument passed");
 
-        //    //Check if todo exists
-        //    TodoEntity rawTodo = await _todoRepository.GetSingleTodoAsync(x => x.Id == todoId);
+            TopicEntity rawTodo = await _topicRepository.GetSingleTopicAsync(x => x.Id == topicId);
 
-        //    if (rawTodo == null)
-        //        throw new TodoNotFoundException();
+            if (rawTodo == null)
+                throw new TopicNotFoundException();
 
-        //    TodoForUpdatingDto todoToPatch = _mapper.Map<TodoForUpdatingDto>(rawTodo);
+            TopicForUpdatingDto topicToPatch = _mapper.Map<TopicForUpdatingDto>(rawTodo);
 
-        //    patchDocument.ApplyTo(todoToPatch);
-        //    _mapper.Map(todoToPatch, rawTodo);
+            patchDocument.ApplyTo(topicToPatch);
+            _mapper.Map(topicToPatch, rawTodo);
 
-        //    //await _todoRepository.Save();
-        //}
+            //await _todoRepository.Save();
+        }
 
         private string AuthenticatedUserId()
         {

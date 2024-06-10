@@ -10,7 +10,7 @@ namespace Forum.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
-        [MaxLength(500)]
+        [MaxLength(1000)]
         public string Content { get; set; }
         [Required]
         [DataType(DataType.Date)]

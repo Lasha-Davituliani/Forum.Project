@@ -121,7 +121,7 @@ namespace Forum.Service.Implementacions
             patchDocument.ApplyTo(commentToPatch);
             _mapper.Map(commentToPatch, rawTodo);
 
-            //await _todoRepository.Save();
+            await _commentRepository.Save();
         }
 
         private string AuthenticatedUserId()

@@ -6,10 +6,10 @@ namespace Forum.Models
 {
     public class CommentForCreatingDto
     {
-        [Key]
-        [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        //[Key]
+        //[Required]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        //public int Id { get; set; }
         [Required]
         [MaxLength(1000)]
         public string Content { get; set; }

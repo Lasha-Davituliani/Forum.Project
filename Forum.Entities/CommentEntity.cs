@@ -23,7 +23,7 @@ namespace Forum.Entities
 
         [Required]
         [ForeignKey(nameof(ApplicationUser))]
-        public string AuthorId { get; set; }
-        public ApplicationUser Author { get; set; }
+        public string UserId { get; set; }
+        public ApplicationUser User { get; set; }
     }
 }

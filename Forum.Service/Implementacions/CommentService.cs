@@ -52,7 +52,7 @@ namespace Forum.Service.Implementacions
             if (rawTodo is null)
                 throw new CommentNotFoundException();
 
-            if (rawTodo.AuthorId.Trim() == AuthenticatedUserId().Trim() || AuthenticatedUserRole().Trim() == "Admin")
+            if (rawTodo.UserId.Trim() == AuthenticatedUserId().Trim() || AuthenticatedUserRole().Trim() == "Admin")
             {
                 _commentRepository.DeleteComment(rawTodo);
                 await _commentRepository.Save();
@@ -70,7 +70,7 @@ namespace Forum.Service.Implementacions
             if (AuthenticatedUserId().Trim() != userId.Trim())
                 throw new UnauthorizedAccessException();
 
-            var rowTodos = await _commentRepository.GetAllCommentsAsync(x => x.AuthorId.Trim() == userId.Trim());
+            var rowTodos = await _commentRepository.GetAllCommentsAsync(x => x.UserId.Trim() == userId.Trim());
             List<CommentForGettingDto> result = new();
 
             if (rowTodos.Count > 0)
@@ -87,7 +87,7 @@ namespace Forum.Service.Implementacions
             if (AuthenticatedUserId().Trim() != userId.Trim())
                 throw new UnauthorizedAccessException();
 
-            var rawTodo = await _commentRepository.GetSingleCommentAsync(x => x.Id == commentId && x.AuthorId == userId);
+            var rawTodo = await _commentRepository.GetSingleCommentAsync(x => x.Id == commentId && x.UserId == userId);
 
             if (rawTodo is null)
                 throw new CommentNotFoundException();

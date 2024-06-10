@@ -17,14 +17,14 @@ namespace Forum.API
             builder.AddControllers();
             builder.AddEndpointsApiExplorer();
             builder.AddSwagger();
-            builder.AddCors();
+            //builder.AddCors();
 
             var app = builder.Build();
             app.UseSwagger();
             app.UseSwaggerUI();
             app.UseMiddleware<CustomExceptionHandlerMiddleware>();
             app.UseHttpsRedirection();
-            app.UseCors(builder.Configuration.GetValue<string>("Cors:AllowOrigin"));
+            //app.UseCors(builder.Configuration.GetValue<string>("Cors:AllowOrigin"));
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();

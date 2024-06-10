@@ -47,7 +47,7 @@ namespace Forum.API.Controllers
             {
                 var loginResponse = await _authService.Login(model);
 
-                if (loginResponse == null)
+                if (loginResponse.User == null)
                 {
                     _response.Result = null;
                     _response.IsSuccess = false;

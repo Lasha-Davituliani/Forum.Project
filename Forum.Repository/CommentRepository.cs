@@ -60,7 +60,7 @@ namespace Forum.Repositories
                 if (commentToUpdate != null)
                 {
                     commentToUpdate.TopicId = entity.TopicId;
-                    commentToUpdate.UserId = entity.UserId;
+                    commentToUpdate.AuthorId = entity.AuthorId;
                     commentToUpdate.Content = entity.Content;
                     commentToUpdate.CreationDate = entity.CreationDate;
 

@@ -23,9 +23,9 @@ namespace Forum.Data
                         .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<CommentEntity>()
-                        .HasOne(c => c.User)
+                        .HasOne(c => c.Author)
                         .WithMany(u => u.Comments)
-                        .HasForeignKey(c => c.UserId)
+                        .HasForeignKey(c => c.AuthorId)
                         .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.SeedTopics();

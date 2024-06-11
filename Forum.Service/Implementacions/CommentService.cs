@@ -36,8 +36,8 @@ namespace Forum.Service.Implementacions
             var result = _mapper.Map<CommentEntity>(commentForCreatingDto);
             await _commentRepository.AddCommentAsync(result);
 
-            var user = await _userManager.FindByIdAsync(commentForCreatingDto.UserId);
-            await _userManager.UpdateAsync(user);
+            //var user = await _userManager.FindByIdAsync(commentForCreatingDto.UserId);
+            //await _userManager.UpdateAsync(user);
 
             await _commentRepository.Save();
         }

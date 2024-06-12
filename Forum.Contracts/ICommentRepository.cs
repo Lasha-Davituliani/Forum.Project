@@ -11,5 +11,6 @@ namespace Forum.Contracts
         Task AddCommentAsync(CommentEntity entity);
         Task UpdateCommentAsync(CommentEntity entity);
         void DeleteComment(CommentEntity entity);
+        Task<TopicEntity> GetTopicAsync(int topicId);
     }
 }

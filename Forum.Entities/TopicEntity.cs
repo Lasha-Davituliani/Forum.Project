@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace Forum.Entities
 {
@@ -26,8 +27,8 @@ namespace Forum.Entities
         public string AuthorId { get; set; }
         public ApplicationUser Author { get; set; }
 
-        [Required]
-        public State State { get; set; }
+        [Required]        
+        public State State { get; set; } 
 
         [Required]
         public Status Status { get; set; }

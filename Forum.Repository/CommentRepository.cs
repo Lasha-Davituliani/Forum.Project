@@ -46,6 +46,11 @@ namespace Forum.Repositories
             return await _context.Comments.FirstOrDefaultAsync(filter);
         }
 
+        public async Task<TopicEntity> GetTopicAsync(int topicId)
+        {
+            return await _context.Topics.FindAsync(topicId);
+        }
+
         public async Task Save()
         {
             await _context.SaveChangesAsync();

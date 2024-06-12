@@ -33,6 +33,11 @@ namespace Forum.Service.Implementacions
             if (commentForCreatingDto.AuthorId != AuthenticatedUserId())
                 throw new UnauthorizedAccessException("Can`t add different users comment!");
 
+            var topic = await _commentRepository.GetTopicAsync(commentForCreatingDto.TopicId);
+
+            if (topic.Status == Status.Inactive)
+                throw new InvalidOperationException("Cannot add a comment to an inactive topic.");
+
             var result = _mapper.Map<CommentEntity>(commentForCreatingDto);
             await _commentRepository.AddCommentAsync(result);
 

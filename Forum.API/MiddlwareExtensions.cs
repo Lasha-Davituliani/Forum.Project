@@ -11,6 +11,7 @@ using Forum.Models.Identity;
 using Forum.Service.Implementacions;
 using Forum.Repositories;
 using Forum.Entities;
+using Forum.Service.Jobs;
 
 namespace Forum.API
 {
@@ -20,7 +21,8 @@ namespace Forum.API
 
         public static void AddBackgroundJobs(this WebApplicationBuilder builder)
         {
-
+            var inactivityDays = builder.Configuration.GetValue<int>("PostSettings:InactivityDays");
+            builder.Services.AddHostedService(sp => new ActiveTopicBackground(sp, sp.GetRequiredService<ILogger<ActiveTopicBackground>>(), inactivityDays));
         }
         public static void ConfigureJwtOptions(this WebApplicationBuilder builder) => builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
 

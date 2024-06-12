@@ -1,4 +1,5 @@
 ﻿using Forum.Entities;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,10 +21,8 @@ namespace Forum.Models
         public DateTime CreationDate { get; set; }
         
         public int CommentCount { get; set; }
-        [Required]
-        [MaxLength(100)]
-        public string AuthorName { get; set; }
-        [Required]
+
+        [Required]        
         public State State { get; set; }
         [Required]
         public Status Status { get; set; }

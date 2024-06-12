@@ -22,6 +22,20 @@ namespace Forum.API.Controllers
             _response = new ApiResponse();
         }
 
+        [HttpGet("AllComments")]
+
+        public async Task<IActionResult> GetAllComments()
+        {
+            var result = await _commnetService.GetAllCommentsAsync();
+
+            _response.Result = result;
+            _response.IsSuccess = true;
+            _response.StatusCode = Convert.ToInt32(HttpStatusCode.OK);
+            _response.Message = "Request completed successfully";
+
+            return StatusCode(_response.StatusCode, _response);
+        }
+
         [HttpGet("{userId}/comment")]
         public async Task<IActionResult> AllCommentsOfUser([FromRoute] string userId)
         {

@@ -22,8 +22,8 @@ namespace Forum.Models
         
         public int CommentCount { get; set; }
 
-        [Required]        
-        public State State { get; set; }
+        [Required]
+        public State State { get; set; } 
         [Required]
         public Status Status { get; set; }
         [Required]

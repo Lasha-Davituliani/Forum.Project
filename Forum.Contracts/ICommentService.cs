@@ -1,10 +1,12 @@
-﻿using Forum.Models;
+﻿using Forum.Entities;
+using Forum.Models;
 using Microsoft.AspNetCore.JsonPatch;
 
 namespace Forum.Contracts
 {
     public  interface ICommentService
     {
+        Task<List<CommentEntity>> GetAllCommentsAsync();
         Task<List<CommentForGettingDto>> GetCommentsOfUserAsync(string userId);
         Task<CommentForGettingDto> GetSingleCommentByUserId(int commentId, string userId);
         Task DeleteCommentAsync(int id);

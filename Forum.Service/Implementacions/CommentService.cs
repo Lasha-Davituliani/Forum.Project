@@ -6,6 +6,7 @@ using Forum.Service.Exceptions;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace Forum.Service.Implementacions
@@ -66,6 +67,11 @@ namespace Forum.Service.Implementacions
             {
                 throw new UnauthorizedAccessException("Can`t delet different users comment!");
             }
+        }
+
+        public async Task<List<CommentEntity>> GetAllCommentsAsync()
+        {
+            return await _commentRepository.GetAllCommentsAsync();
         }
 
         public async Task<List<CommentForGettingDto>> GetCommentsOfUserAsync(string userId)

@@ -32,7 +32,26 @@ namespace Forum.Repositories
 
         public async Task<List<TopicEntity>> GetAllTopicsAsync()
         {
-            return await _context.Topics.ToListAsync();
+            return await _context.Topics
+                .Include(t => t.Comments) // Eager load comments
+                .ToListAsync();
+        }
+
+        public async Task<List<TopicEntity>> GetAllTopicsWithCommentCountsAsync()
+        {
+            return await _context.Topics
+                .Include(t => t.Comments) // Eager load comments
+                .Select(t => new TopicEntity
+                {
+                    Id = t.Id,                    
+                    Description = t.Description,
+                    CreationDate = t.CreationDate,
+                    AuthorId = t.AuthorId,
+                    Author = t.Author,
+                    Comments = t.Comments, // Include comments
+                    CommentCount = t.Comments.Count // Count of comments
+                })
+                .ToListAsync();
         }
 
         public async Task<List<TopicEntity>> GetAllTopicsAsync(Expression<Func<TopicEntity, bool>> filter)

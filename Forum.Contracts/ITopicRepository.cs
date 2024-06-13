@@ -11,5 +11,6 @@ namespace Forum.Contracts
         Task AddTopicAsync(TopicEntity entity);
         Task UpdateTopicAsync(TopicEntity entity);
         void DeleteTopic(TopicEntity entity);
+        Task<List<TopicEntity>> GetAllTopicsWithCommentCountsAsync();
     }
 }

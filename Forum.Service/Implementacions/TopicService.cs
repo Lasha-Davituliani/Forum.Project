@@ -65,9 +65,12 @@ namespace Forum.Service.Implementacions
             }
         }
 
-        public async Task<List<TopicEntity>> GetAllTopicsAsync()
+        public async Task<List<TopicForGettingDto>> GetAllTopicsAsync()
         {
-            return await _topicRepository.GetAllTopicsAsync();
+            //return await _topicRepository.GetAllTopicsAsync();
+
+            var topics = await _topicRepository.GetAllTopicsWithCommentCountsAsync();
+            return _mapper.Map<List<TopicForGettingDto>>(topics);
         }
 
         public async Task<TopicForGettingDto> GetSingleTopicByUserId(int topicId, string userId)

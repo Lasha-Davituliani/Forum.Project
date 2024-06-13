@@ -12,17 +12,19 @@ namespace Forum.Service.Implementacions
 {
     public class TopicService : ITopicService
     {
+        private readonly ICommentRepository _commentRepository;
         private readonly ITopicRepository _topicRepository;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager;
 
-        public TopicService(ITopicRepository topicRepository, IHttpContextAccessor httpContextAccessor, Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager)
+        public TopicService(ITopicRepository topicRepository, ICommentRepository commentRepository, IHttpContextAccessor httpContextAccessor, Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager)
         {
             _topicRepository = topicRepository;
             _httpContextAccessor = httpContextAccessor;
             _mapper = MappingInitializer.Initialize();
             _userManager = userManager;
+            _commentRepository = commentRepository;
 
         }
         public async Task AddTopicAsync(TopicForCreatingDto topicForCreatingDto)
@@ -47,14 +49,14 @@ namespace Forum.Service.Implementacions
             if (Id <= 0)
                 throw new ArgumentNullException("Invalid argument passed");
 
-            var rawTodo = await _topicRepository.GetSingleTopicAsync(x => x.Id == Id);
+            var rawTopics = await _topicRepository.GetSingleTopicAsync(x => x.Id == Id);
 
-            if (rawTodo is null)
+            if (rawTopics is null)
                 throw new TopicNotFoundException();
 
-            if (rawTodo.AuthorId.Trim() == AuthenticatedUserId().Trim() || AuthenticatedUserRole().Trim() == "Admin")
+            if (rawTopics.AuthorId.Trim() == AuthenticatedUserId().Trim() || AuthenticatedUserRole().Trim() == "Admin")
             {
-                _topicRepository.DeleteTopic(rawTodo);
+                _topicRepository.DeleteTopic(rawTopics);
                 await _topicRepository.Save();
             }
             else
@@ -76,12 +78,14 @@ namespace Forum.Service.Implementacions
             if (AuthenticatedUserId().Trim() != userId.Trim())
                 throw new UnauthorizedAccessException();
 
-            var rawTodo = await _topicRepository.GetSingleTopicAsync(x => x.Id == topicId && x.AuthorId == userId);
+            var rawTopic = await _topicRepository.GetSingleTopicAsync(x => x.Id == topicId && x.AuthorId == userId);
 
-            if (rawTodo is null)
+
+            if (rawTopic is null)
                 throw new TopicNotFoundException();
 
-            var result = _mapper.Map<TopicForGettingDto>(rawTodo);
+            var result = _mapper.Map<TopicForGettingDto>(rawTopic);
+            
             return result;
         }
 
@@ -89,16 +93,25 @@ namespace Forum.Service.Implementacions
         {
             if (string.IsNullOrWhiteSpace(userId))
                 throw new ArgumentNullException("Invalid argument passed");
+
             if (AuthenticatedUserId().Trim() != userId.Trim())
                 throw new UnauthorizedAccessException();
 
-            var rowTodos = await _topicRepository.GetAllTopicsAsync(x => x.AuthorId.Trim() == userId.Trim());
-            List<TopicForGettingDto> result = new();
+            var rawTopics = await _topicRepository.GetAllTopicsAsync(x => x.AuthorId.Trim() == userId.Trim());
+            var topicDtos = new List<TopicForGettingDto>();
 
-            if (rowTodos.Count > 0)
-                result = _mapper.Map<List<TopicForGettingDto>>(rowTodos);
+            foreach (var rawTopic in rawTopics)
+            {
+                var topicDto = _mapper.Map<TopicForGettingDto>(rawTopic);
+                topicDto.CommentCount = await _commentRepository.CountAsync(c => c.TopicId == rawTopic.Id);
 
-            return result;
+                var user = await _userManager.FindByIdAsync(rawTopic.AuthorId);
+                topicDto.AuthorName = user?.UserName;
+
+                topicDtos.Add(topicDto);
+            }
+
+            return topicDtos;
         }
 
         public async Task UpdateTopicAsync(TopicForUpdatingDto topicForUpdatingDto)
@@ -117,15 +130,15 @@ namespace Forum.Service.Implementacions
             if (topicId <= 0)
                 throw new ArgumentException("Invalid argument passed");
 
-            TopicEntity rawTodo = await _topicRepository.GetSingleTopicAsync(x => x.Id == topicId);
+            TopicEntity rawTopics = await _topicRepository.GetSingleTopicAsync(x => x.Id == topicId);
 
-            if (rawTodo == null)
+            if (rawTopics == null)
                 throw new TopicNotFoundException();
 
-            TopicForUpdatingDto topicToPatch = _mapper.Map<TopicForUpdatingDto>(rawTodo);
+            TopicForUpdatingDto topicToPatch = _mapper.Map<TopicForUpdatingDto>(rawTopics);
 
             patchDocument.ApplyTo(topicToPatch);
-            _mapper.Map(topicToPatch, rawTodo);
+            _mapper.Map(topicToPatch, rawTopics);
 
             await _topicRepository.Save();
         }

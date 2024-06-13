@@ -21,6 +21,12 @@ namespace Forum.Repositories
             }
         }
 
+        public async Task<int> CountAsync(Expression<Func<CommentEntity, bool>> predicate)
+        {
+            return await _context.Comments
+                .CountAsync(predicate);
+        }
+
         public void DeleteComment(CommentEntity entity)
         {
             if (entity != null)

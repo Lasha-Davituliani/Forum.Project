@@ -11,7 +11,7 @@ namespace Forum.API
             builder.AddIdentity();
             builder.AddAuthentication();
             builder.AddHttpContextAccessor();
-            //builder.AddBackgroundJobs();
+            builder.AddBackgroundJobs();
             builder.AddScopedServices();
             builder.AddControllers();
             builder.AddEndpointsApiExplorer();

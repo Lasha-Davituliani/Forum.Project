@@ -42,9 +42,6 @@ namespace Forum.Service.Implementacions
             var result = _mapper.Map<CommentEntity>(commentForCreatingDto);
             await _commentRepository.AddCommentAsync(result);
 
-            //var user = await _userManager.FindByIdAsync(commentForCreatingDto.UserId);
-            //await _userManager.UpdateAsync(user);
-
             await _commentRepository.Save();
         }
 
@@ -53,14 +50,14 @@ namespace Forum.Service.Implementacions
             if (id <= 0)
                 throw new ArgumentNullException("Invalid argument passed");
 
-            var rawTodo = await _commentRepository.GetSingleCommentAsync(x => x.Id == id);
+            var rawComment = await _commentRepository.GetSingleCommentAsync(x => x.Id == id);
 
-            if (rawTodo is null)
+            if (rawComment is null)
                 throw new CommentNotFoundException();
 
-            if (rawTodo.AuthorId.Trim() == AuthenticatedUserId().Trim() || AuthenticatedUserRole().Trim() == "Admin")
+            if (rawComment.AuthorId.Trim() == AuthenticatedUserId().Trim() || AuthenticatedUserRole().Trim() == "Admin")
             {
-                _commentRepository.DeleteComment(rawTodo);
+                _commentRepository.DeleteComment(rawComment);
                 await _commentRepository.Save();
             }
             else
@@ -81,11 +78,11 @@ namespace Forum.Service.Implementacions
             if (AuthenticatedUserId().Trim() != userId.Trim())
                 throw new UnauthorizedAccessException();
 
-            var rowTodos = await _commentRepository.GetAllCommentsAsync(x => x.AuthorId.Trim() == userId.Trim());
+            var rawComment = await _commentRepository.GetAllCommentsAsync(x => x.AuthorId.Trim() == userId.Trim());
             List<CommentForGettingDto> result = new();
 
-            if (rowTodos.Count > 0)
-                result = _mapper.Map<List<CommentForGettingDto>>(rowTodos);
+            if (rawComment.Count > 0)
+                result = _mapper.Map<List<CommentForGettingDto>>(rawComment);
 
             return result;
         }
@@ -98,12 +95,12 @@ namespace Forum.Service.Implementacions
             if (AuthenticatedUserId().Trim() != userId.Trim())
                 throw new UnauthorizedAccessException();
 
-            var rawTodo = await _commentRepository.GetSingleCommentAsync(x => x.Id == commentId && x.AuthorId == userId);
+            var rawComment = await _commentRepository.GetSingleCommentAsync(x => x.Id == commentId && x.AuthorId == userId);
 
-            if (rawTodo is null)
+            if (rawComment is null)
                 throw new CommentNotFoundException();
 
-            var result = _mapper.Map<CommentForGettingDto>(rawTodo);
+            var result = _mapper.Map<CommentForGettingDto>(rawComment);
             return result;
         }
 
@@ -122,15 +119,15 @@ namespace Forum.Service.Implementacions
             if (commentId <= 0)
                 throw new ArgumentException("Invalid argument passed");
 
-            CommentEntity rawTodo = await _commentRepository.GetSingleCommentAsync(x => x.Id == commentId);
+            CommentEntity rawComment = await _commentRepository.GetSingleCommentAsync(x => x.Id == commentId);
 
-            if (rawTodo == null)
+            if (rawComment == null)
                 throw new CommentNotFoundException();
 
-            CommentForUpdatingDto commentToPatch = _mapper.Map<CommentForUpdatingDto>(rawTodo);
+            CommentForUpdatingDto commentToPatch = _mapper.Map<CommentForUpdatingDto>(rawComment);
 
             patchDocument.ApplyTo(commentToPatch);
-            _mapper.Map(commentToPatch, rawTodo);
+            _mapper.Map(commentToPatch, rawComment);
 
             await _commentRepository.Save();
         }

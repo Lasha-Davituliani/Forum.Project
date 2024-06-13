@@ -49,20 +49,6 @@ namespace Forum.API.Controllers
             return StatusCode(_response.StatusCode, _response);
         }
 
-        [HttpGet("{userId}/ {commentId}")]
-        [Authorize]
-        public async Task<IActionResult> SingleCommentOfUser([FromRoute] string userId, [FromRoute] int commentId)
-        {
-            var result = await _commnetService.GetSingleCommentByUserId(commentId, userId);
-
-            _response.Result = result;
-            _response.IsSuccess = true;
-            _response.StatusCode = Convert.ToInt32(HttpStatusCode.OK);
-            _response.Message = "Request completed successfully";
-
-            return StatusCode(_response.StatusCode, _response);
-        }
-
         [HttpPost("addComment")]
         public async Task<IActionResult> AddComment([FromBody] CommentForCreatingDto model)
         {
@@ -98,19 +84,6 @@ namespace Forum.API.Controllers
             _response.IsSuccess = true;
             _response.StatusCode = Convert.ToInt32(HttpStatusCode.OK);
             _response.Message = "Comment updated successfully";
-
-            return StatusCode(_response.StatusCode, _response);
-        }
-
-        [HttpPut]
-        public async Task<IActionResult> UpdateComment([FromBody] CommentForUpdatingDto commentForUpdatingDto)
-        {
-            await _commnetService.UpdateCommentAsync(commentForUpdatingDto);
-
-            _response.Result = commentForUpdatingDto;
-            _response.IsSuccess = true;
-            _response.StatusCode = Convert.ToInt32(HttpStatusCode.OK);
-            _response.Message = "Request completed successfully";
 
             return StatusCode(_response.StatusCode, _response);
         }

@@ -63,6 +63,11 @@ namespace Forum.Service.Implementacions
             }
         }
 
+        public async Task<List<TopicEntity>> GetAllTopicsAsync()
+        {
+            return await _topicRepository.GetAllTopicsAsync();
+        }
+
         public async Task<TopicForGettingDto> GetSingleTopicByUserId(int topicId, string userId)
         {
             if (topicId <= 0 || string.IsNullOrWhiteSpace(userId))
@@ -122,7 +127,7 @@ namespace Forum.Service.Implementacions
             patchDocument.ApplyTo(topicToPatch);
             _mapper.Map(topicToPatch, rawTodo);
 
-            //await _todoRepository.Save();
+            await _topicRepository.Save();
         }
 
         private string AuthenticatedUserId()

@@ -21,6 +21,18 @@ namespace Forum.API.Controllers
             _topicService = topicService;
             _response = new ApiResponse();
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAllTopics()
+        {
+            var result = await _topicService.GetAllTopicsAsync();
+
+            _response.Result = result;
+            _response.IsSuccess = true;
+            _response.StatusCode = Convert.ToInt32(HttpStatusCode.OK);
+            _response.Message = "Request completed successfully";
+
+            return StatusCode(_response.StatusCode, _response);
+        }
 
         [HttpGet("{userId}")]
         public async Task<IActionResult> AllTopicsOfUser([FromRoute] string userId)
@@ -84,19 +96,6 @@ namespace Forum.API.Controllers
             _response.IsSuccess = true;
             _response.StatusCode = Convert.ToInt32(HttpStatusCode.OK);
             _response.Message = "Topic updated successfully";
-
-            return StatusCode(_response.StatusCode, _response);
-        }
-
-        [HttpPut]
-        public async Task<IActionResult> UpdateTopic([FromBody] TopicForUpdatingDto topicForUpdatingDto)
-        {
-            await _topicService.UpdateTopicAsync(topicForUpdatingDto);
-
-            _response.Result = topicForUpdatingDto;
-            _response.IsSuccess = true;
-            _response.StatusCode = Convert.ToInt32(HttpStatusCode.OK);
-            _response.Message = "Request completed successfully";
 
             return StatusCode(_response.StatusCode, _response);
         }

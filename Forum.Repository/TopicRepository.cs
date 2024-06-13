@@ -33,14 +33,14 @@ namespace Forum.Repositories
         public async Task<List<TopicEntity>> GetAllTopicsAsync()
         {
             return await _context.Topics
-                .Include(t => t.Comments) // Eager load comments
+                .Include(t => t.Comments) 
                 .ToListAsync();
         }
 
         public async Task<List<TopicEntity>> GetAllTopicsWithCommentCountsAsync()
         {
             return await _context.Topics
-                .Include(t => t.Comments) // Eager load comments
+                .Include(t => t.Comments) 
                 .Select(t => new TopicEntity
                 {
                     Id = t.Id,                    
@@ -48,8 +48,8 @@ namespace Forum.Repositories
                     CreationDate = t.CreationDate,
                     AuthorId = t.AuthorId,
                     Author = t.Author,
-                    Comments = t.Comments, // Include comments
-                    CommentCount = t.Comments.Count // Count of comments
+                    Comments = t.Comments, 
+                    CommentCount = t.Comments.Count 
                 })
                 .ToListAsync();
         }

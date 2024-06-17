@@ -10,10 +10,9 @@ namespace Forum.Models
         public string Description { get; set; }
         public DateTime CreationDate { get; set; }
         public int CommentCount { get; set; }
-        public string AuthorName { get; set; }
         public State State { get; set; }
         public Status Status { get; set; }
-        public string UserId { get; set; }
-        public UserDto User { get; set; }
+        public string AuthorId { get; set; }
+        public UserDto Author { get; set; }
     }
 }

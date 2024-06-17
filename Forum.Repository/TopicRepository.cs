@@ -33,7 +33,8 @@ namespace Forum.Repositories
         public async Task<List<TopicEntity>> GetAllTopicsAsync()
         {
             return await _context.Topics
-                .Include(t => t.Comments) 
+                .Include(t => t.Comments)
+                .Include(t => t.Author)
                 .ToListAsync();
         }
 

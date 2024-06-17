@@ -107,7 +107,6 @@ namespace Forum.Service.Implementacions
                 topicDto.CommentCount = await _commentRepository.CountAsync(c => c.TopicId == rawTopic.Id);
 
                 var user = await _userManager.FindByIdAsync(rawTopic.AuthorId);
-                topicDto.AuthorName = user?.UserName;
 
                 topicDtos.Add(topicDto);
             }

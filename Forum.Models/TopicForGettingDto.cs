@@ -10,6 +10,7 @@ namespace Forum.Models
         public string Description { get; set; }
         public DateTime CreationDate { get; set; }
         public int CommentCount { get; set; }
+        public ICollection<CommentForGettingDto> Comments { get; set; }
         public State State { get; set; }
         public Status Status { get; set; }
         public string AuthorId { get; set; }

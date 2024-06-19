@@ -37,7 +37,9 @@ namespace Forum.Repositories
 
         public async Task<List<CommentEntity>> GetAllCommentsAsync()
         {
-            return await _context.Comments.ToListAsync();
+            return await _context.Comments
+                .Include(c => c.Author)
+                .ToListAsync();
         }
 
         public async Task<List<CommentEntity>> GetAllCommentsAsync(Expression<Func<CommentEntity, bool>> filter)
